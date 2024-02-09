@@ -6,11 +6,22 @@ import telebot
 from telebot import async_telebot
 import asyncio
 
-bot = async_telebot.AsyncTeleBot(creds.api_token)
+bot = async_telebot.AsyncTeleBot(creds.telegramm_api_token)
 
 async def add_line_to_csv(message):
+    target_file = ""
+    if message.text[0] == '-':
+        await bot.send_message(message.chat.id, "Сохраняю в прошлый месяц")
+        if int(datetime.now().date().strftime('%m')) - 1 == 0:
+            target_file = f"{os.path.dirname(__file__)}/{int(datetime.now().year) - 1}_12.csv"
+        else:
+            target_file = f"{os.path.dirname(__file__)}/{datetime.now().year}_{'{:02d}'.format(int(datetime.now().date().strftime('%m')) - 1)}.csv"
+        message.text = message.text[1:]
+    else:
+        target_file = f"{os.path.dirname(__file__)}/{datetime.now().year}_{datetime.now().date().strftime('%m')}.csv"
+        
     try:
-        with open (f"{os.path.dirname(__file__)}/{datetime.now().year}_{datetime.now().date().strftime('%m')}.csv", 'a+', encoding="utf-8") as file:
+        with open (target_file, 'a+', encoding="utf-8") as file:
             date = datetime.now().date().strftime("%Y-%m-%d")
             #print (date)
             time = datetime.now().time().strftime("%H:%M:%S")
@@ -29,7 +40,7 @@ async def add_line_to_csv(message):
             print(f"{date};{time};{name};{category};{amount};{describtion}\n")
             try:     
                 file.write(f"{date};{time};{name};{category};{amount};{describtion}\n")
-                await bot.send_message(message.chat.id, f"Сохранено {amount}руб в категории {category}") # в файл {file.name}")
+                await bot.send_message(message.chat.id, f"Сохранено {amount} руб в категории {category}") # в файл {file.name}")
                 print(f"{date};{time};{name};{category};{amount};{describtion}\n")
                 return 1
             except Exception as error:
