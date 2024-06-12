@@ -3,6 +3,10 @@ import os
 
 #import pandas as pd
 
+month_array = ["Январь", "Февраль", "Март", 
+               "Апрель", "Май", "Июнь", 
+               "Июль", "Август", "Сентябрь", 
+               "Октябрь", "Ноябрь", "Декабрь"]
 
 def draw_single_report(fig, person, colomn, file_name):
     #print()

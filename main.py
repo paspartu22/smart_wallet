@@ -5,8 +5,14 @@ import telebot
 from telebot import async_telebot
 import asyncio
 
-from report import draw_report
-bot = async_telebot.AsyncTeleBot(creds.test_telegramm_api_token)
+from report import draw_report, month_array
+
+api = creds.telegramm_api_token
+if (os.environ['COMPUTERNAME'] == "DESKTOP-ANDREY"):
+    print("Start test bot")
+    api = creds.test_telegramm_api_token
+bot = async_telebot.AsyncTeleBot(api)
+
 categories = {}
 
 async def add_line_to_csv(message):
@@ -184,9 +190,11 @@ async def output_report(message):
         target_file = f"{os.path.dirname(__file__)}/{target_year}_{str(target_month).zfill(2)}.csv"                
         draw_name = draw_report(target_file)
         #await bot.send_photo(message.chat.id, photo=open(draw_name, 'rb'))    
+        await bot.send_message(message.chat.id, f"Отчет за {month_array[target_month-1]} {target_year}")
         await bot.send_document(message.chat.id, document=open(draw_name, 'rb'))
-        await bot.send_message(creds.report_chat_id, f"Отчет за {target_month} {target_year}")
-        #await bot.send_photo(creds.report_chat_id, photo=open(draw_name, 'rb'))    
+        
+        #await bot.send_photo(creds.report_chat_id, photo=open(draw_name, 'rb'))   
+        await bot.send_message(creds.report_chat_id, f"Отчет за {month_array[target_month-1]} {target_year}")
         await bot.send_document(creds.report_chat_id, document=open(draw_name, 'rb')) 
         
     except Exception as error:
