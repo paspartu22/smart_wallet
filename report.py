@@ -65,11 +65,11 @@ def draw_single_report(fig, person, colomn, file_name):
 
 def draw_report(file_name):
     
-    fig = plt.figure("Отчет", figsize=(1920/100, 1080/100), dpi=100)
-    
+    fig = plt.figure("Отчет", figsize=(1920/100, 1080/100), dpi=100, facecolor='w') 
+    #plt.style.use('Solarize_Light2')   
     #plt.rcParams["figure.figsize"] = [7.00, 3.50]
     #plt.rcParams["figure.autolayout"] = True
-    fig.patch.set_visible(False)
+    #fig.patch.set_visible(False)
     draw_single_report(fig, ["Дарья"], 1, file_name)
     draw_single_report(fig, ["Дарья", "Андрей"], 2, file_name)
     draw_single_report(fig, ["Андрей"], 3, file_name)
