@@ -8,7 +8,7 @@ import asyncio
 from report import draw_report, month_array
 
 api = creds.telegramm_api_token
-if (os.environ['COMPUTERNAME'] == "DESKTOP-ANDREY"):
+if ('COMPUTERNAME' in os.environ and os.environ['COMPUTERNAME'] == "DESKTOP-ANDREY"):
     print("Start test bot")
     api = creds.test_telegramm_api_token
 bot = async_telebot.AsyncTeleBot(api)
@@ -170,11 +170,11 @@ async def output_report(message):
         target_month = 0
         if (len(message.text.split()) == 1):
             target_year = datetime.now().year
-            target_month = datetime.now().date().strftime('%m')
+            target_month = int(datetime.now().date().strftime('%m'))
             
         elif (len(message.text.split()) == 3):
             target_year = message.text.split()[2]
-            target_month = datetime.now().date().strftime('%m')
+            target_month = int(datetime.now().date().strftime('%m'))
     
         elif (len(message.text.split()) == 2):
             if (int(message.text.split()[1]) < 0):
