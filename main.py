@@ -17,6 +17,18 @@ categories = {}
 
 async def add_line_to_csv(message):
     message_data = message.text.split()
+    target_file = ""
+    if message.text[0] == '-':
+        await bot.send_message(message.chat.id, "Сохраняю в прошлый месяц")
+        if int(datetime.now().date().strftime('%m')) - 1 == 0:
+            target_file = f"{os.path.dirname(__file__)}/{int(datetime.now().year) - 1}_12.csv"
+        else:
+            target_file = f"{os.path.dirname(__file__)}/{datetime.now().year}_{'{:02d}'.format(int(datetime.now().date().strftime('%m')) - 1)}.csv"
+        message.text = message.text[1:]
+    else:
+        target_file = f"{os.path.dirname(__file__)}/{datetime.now().year}_{datetime.now().date().strftime('%m')}.csv"
+        
+        
     message_data[0] = message_data[0].capitalize()
     if (message_data[0] not in categories):
         category_list = ""
@@ -31,17 +43,7 @@ async def add_line_to_csv(message):
         await bot.send_message(message.chat.id, f"Error. Количество не число: \n{error}")
         return 0
     
-    target_file = ""
-    if message.text[0] == '-':
-        await bot.send_message(message.chat.id, "Сохраняю в прошлый месяц")
-        if int(datetime.now().date().strftime('%m')) - 1 == 0:
-            target_file = f"{os.path.dirname(__file__)}/{int(datetime.now().year) - 1}_12.csv"
-        else:
-            target_file = f"{os.path.dirname(__file__)}/{datetime.now().year}_{'{:02d}'.format(int(datetime.now().date().strftime('%m')) - 1)}.csv"
-        message.text = message.text[1:]
-    else:
-        target_file = f"{os.path.dirname(__file__)}/{datetime.now().year}_{datetime.now().date().strftime('%m')}.csv"
-        
+
     try:
         with open (target_file, 'a+', encoding="utf-8") as file:
             date = datetime.now().date().strftime("%Y-%m-%d")
