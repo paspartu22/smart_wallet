@@ -16,7 +16,6 @@ bot = async_telebot.AsyncTeleBot(api)
 categories = {}
 
 async def add_line_to_csv(message):
-    message_data = message.text.split()
     target_file = ""
     if message.text[0] == '-':
         await bot.send_message(message.chat.id, "Сохраняю в прошлый месяц")
@@ -29,6 +28,7 @@ async def add_line_to_csv(message):
         target_file = f"{os.path.dirname(__file__)}/{datetime.now().year}_{datetime.now().date().strftime('%m')}.csv"
         
         
+    message_data = message.text.split()
     message_data[0] = message_data[0].capitalize()
     if (message_data[0] not in categories):
         category_list = ""
